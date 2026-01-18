@@ -1,12 +1,13 @@
 import torch.nn as nn
 from transformers import BertModel
 
-class BERTSentiment(nn.Module):
-    def __init__(self, num_labels=3):
+class BERTClassifier(nn.Module):
+    def __init__(self, dropout=0.3, num_classes=1):
         super().__init__()
-        self.bert = BertModel.from_pretrained("bert-base-chinese")
-        self.dropout = nn.Dropout(0.3)
-        self.classifier = nn.Linear(self.bert.config.hidden_size, num_labels)
+        self.bert = BertModel.from_pretrained("hfl/chinese-roberta-wwm-ext")
+        self.dropout = nn.Dropout(dropout)
+        self.classifier = nn.Linear(self.bert.config.hidden_size, num_classes)
+        self.sigmoid = nn.Sigmoid()
 
     def forward(self, input_ids, attention_mask):
         outputs = self.bert(

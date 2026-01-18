@@ -2,8 +2,9 @@
 __pycache__/
 *.pyc
 
-# Data
+# Data\Model
 data/*.csv
+src/models/chinese-roberta-wwm-ext/
 
 # Jupyter
 .ipynb_checkpoints/

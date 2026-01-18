@@ -2,20 +2,27 @@ import torch
 import torch.nn.functional as F
 from tqdm import tqdm
 
-def test(model, test_loader, device):
+def test(model, test_loader, device, num_classes=1):
     model.eval()
     total_loss = 0.0
     correct = 0
     total = 0
     with torch.no_grad():
-        for batch in tqdm(test_loader, desc="Testing"):
+        for batch in test_loader:
             input_ids = batch["input_ids"].to(device)
             attention_mask = batch["attention_mask"].to(device)
             labels = batch["label"].to(device)
             outputs = model(input_ids, attention_mask)
-            loss = F.cross_entropy(outputs, labels)
+            if num_classes == 1:
+                loss = F.binary_cross_entropy_with_logits(outputs.squeeze(), labels.float())
+            else:
+                loss = F.cross_entropy(outputs, labels)
 
-            _, predicted = torch.max(outputs.data, 1)
+            if num_classes == 1:
+                predicted = (outputs > 0).long()
+            else:
+                _, predicted = torch.max(outputs, dim=1)
+            
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
             total_loss += loss.item()
