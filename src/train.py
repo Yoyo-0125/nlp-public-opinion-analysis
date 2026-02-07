@@ -18,7 +18,7 @@ def train(model, train_loader, optimizer, device, num_classes, epoch):
         if num_classes == 1:
             loss = F.binary_cross_entropy_with_logits(outputs.squeeze(), labels.float())
         else:
-            loss = F.cross_entropy(outputs, labels)
+            loss = F.cross_entropy(outputs, labels, label_smoothing=0.1)
 
         loss.backward()
         optimizer.step()
@@ -31,7 +31,7 @@ def train(model, train_loader, optimizer, device, num_classes, epoch):
         total += labels.size(0)
         correct += (predicted == labels).sum().item()
         total_loss += loss.item()
-
+        
         if loss.item() < 0.001:
             print("\nEarly Stopped: ", loss.item())
             early_stop = True

@@ -2,9 +2,12 @@
 __pycache__/
 *.pyc
 
-# Data\Model
+# Data
 data/*.csv
-src/models/chinese-roberta-wwm-ext/
 
 # Jupyter
 .ipynb_checkpoints/
+
+# Models
+src/models/chinese-roberta-wwm-ext/
+src/models/text2vec-base-chinese/
