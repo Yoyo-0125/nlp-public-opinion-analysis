@@ -55,8 +55,26 @@ logs/
 *_auth.json
 *_data.json
 
+# Chrome 浏览器数据 (DrissionPage)
+chrome_data*/
+chrome_*/
+chromium_data/
+
 # GitHub Pages 输出目录 (动态生成)
 html/data/*.json
 html/data/*.csv
 docs/data/*.json
 docs/data/*.csv
+
+# 临时测试文件
+test_*.py
+test_*.bat
+test_*.json
+run_script.bat
+
+# 下载的 HTML 文件
+*.html
+*_files/
+CLAUDE_CODE.md
+CLAUDE_CODE.md
+*.diff
