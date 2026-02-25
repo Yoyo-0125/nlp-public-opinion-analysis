@@ -3,13 +3,15 @@ import os
 import json
 from time import sleep
 from urllib.parse import quote
+from datetime import datetime
 from pathlib import Path
 from dotenv import load_dotenv
 from fake_useragent import UserAgent
 
 load_dotenv()
 
-class Crawler:
+
+class WeiboCrawler:
     def __init__(self):
         ua = UserAgent()
         self.HEADERS = json.loads(os.getenv('WEIBO_HEADERS'))
@@ -23,7 +25,8 @@ class Crawler:
             return ''
         return re.sub('<.*?>', '', raw_html)
 
-class BaseCrawler:
+
+class ZhihuCrawler:
     def __init__(self):
         self.page = None
         self.CHROME_DATA_DIR = Path(__file__).parent.parent / 'chrome_data_zhihu_ring'
@@ -47,9 +50,8 @@ class BaseCrawler:
             self.page.quit()
             self.page = None
 
-# ==================== 微博爬虫 ====================
 
-class WeiboHotCrawler(Crawler):
+class WeiboHotCrawler(WeiboCrawler):
     def __init__(self):
         super().__init__()
         self.results = []
@@ -76,13 +78,9 @@ class WeiboHotCrawler(Crawler):
         return self.results
 
 
-class WeiboTextCrawler(Crawler):
+class WeiboTextCrawler(WeiboCrawler):
     def __init__(self):
         super().__init__()
-        self.results = []
-        self.url = 'https://m.weibo.cn/api/container/getIndex'
-
-    def __init__(self):
         self.results = []
         self.url = 'https://m.weibo.cn/api/container/getIndex'
         self.headers = {
@@ -128,9 +126,7 @@ class WeiboTextCrawler(Crawler):
         return self.results
 
 
-# ==================== 知乎圈子爬虫 ====================
-
-class ZhihuCircleCrawler(BaseCrawler):
+class ZhihuCircleCrawler(ZhihuCrawler):
     def crawl_ring(self, ring_id, max_days=0, save=True, max_posts=9999, min_comments=0):
         """
         爬取指定圈子
@@ -328,7 +324,8 @@ class ZhihuCircleCrawler(BaseCrawler):
 
     def _save(self, results):
         """保存结果"""
-        output = Path(__file__).parent.parent / 'data' / 'zhihu_ring_data_new.json'
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M')
+        output = Path(__file__).parent.parent / 'data' / f'zhihu_ring_data_{timestamp}.json'
 
         # 合并已有数据
         existing = []
@@ -351,7 +348,6 @@ if __name__ == '__main__':
     print("数据爬虫测试")
     print("=" * 50)
 
-    # ==================== WeiboHotCrawler 测试 ====================
     print("\n=== WeiboHotCrawler ===")
     crawler1 = WeiboHotCrawler()
     results1 = crawler1.crawl()
@@ -359,11 +355,9 @@ if __name__ == '__main__':
     if results1:
         print(f"  第1名: {results1[0]}")
 
-    # ==================== WeiboTextCrawler 测试 ====================
     print("\n=== WeiboTextCrawler ===")
     print("(跳过 - 需要Cookie)")
 
-    # ==================== ZhihuCircleCrawler 测试 ====================
     print("\n=== ZhihuCircleCrawler ===")
     crawler3 = ZhihuCircleCrawler()
     results3 = crawler3.crawl_ring("1913608407048511547", max_posts=2, save=False)

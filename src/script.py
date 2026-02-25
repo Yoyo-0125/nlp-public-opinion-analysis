@@ -3,6 +3,7 @@ import os
 import sys
 import time
 import torch
+from datetime import datetime
 from pathlib import Path
 from transformers import AutoTokenizer
 from dotenv import load_dotenv
@@ -19,8 +20,11 @@ from src.models.lstm import LSTMClassifier
 
 TARGET_POSTS = 3000
 CIRCLES_FILE = 'data/zhihu_ai_circles.json'
-DATA_FILE = 'data/zhihu_ring_data.json'
-RESULTS_FILE = 'data/sentiment_results.json'
+
+# 自动生成带时间戳的文件名
+TIMESTAMP = datetime.now().strftime('%Y%m%d_%H%M')
+DATA_FILE = f'data/zhihu_ring_data_{TIMESTAMP}.json'
+RESULTS_FILE = f'data/zhihu_ring_data_{TIMESTAMP}_senti.json'
 
 
 def load_tokenizer():
