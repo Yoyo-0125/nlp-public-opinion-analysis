@@ -1,133 +1,134 @@
-from data_crawler import WeiboHotCrawler, WeiboTextCrawler, ZhihuSearchCrawler
-from dotenv import load_dotenv
 import json
-from datetime import datetime
+import os
+import sys
+import time
+import torch
 from pathlib import Path
+from transformers import AutoTokenizer
+from dotenv import load_dotenv
 
+if sys.platform == 'win32':
+    import io
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+
+sys.path.insert(0, str(Path(__file__).parent.parent))
 load_dotenv()
 
-# 使用绝对路径，避免工作目录不同导致的问题
-OUTPUT_DIR = Path(__file__).parent.parent / "html/data"  # GitHub Pages 会读取这个目录
-OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+from src.data_crawler import ZhihuCircleCrawler
+from src.models.lstm import LSTMClassifier
 
-# 调试：打印输出路径
-print(f"[INFO] 输出目录: {OUTPUT_DIR.resolve()}")
+TARGET_POSTS = 3000
+CIRCLES_FILE = 'data/zhihu_ai_circles.json'
+DATA_FILE = 'data/zhihu_ring_data.json'
+RESULTS_FILE = 'data/sentiment_results.json'
 
 
-def analyze_sentiment(text):
-    """情感分析（简单规则）"""
-    positive_words = ["好", "棒", "喜欢", "爱", "赞", "优秀", "精彩", "推荐", "支持", "不错", "可以"]
-    negative_words = ["差", "坏", "讨厌", "恨", "烂", "垃圾", "失望", "糟糕", "反对", "不好"]
+def load_tokenizer():
+    path = os.getenv('ROBERTA_MODEL_PATH', './src/models/chinese-roberta-wwm-ext')
+    return AutoTokenizer.from_pretrained(path) if os.path.exists(path) else AutoTokenizer.from_pretrained('bert-base-chinese')
 
-    pos_count = sum(1 for w in positive_words if w in text)
-    neg_count = sum(1 for w in negative_words if w in text)
 
-    if pos_count > neg_count:
-        return "positive", pos_count / (pos_count + neg_count + 1)
-    elif neg_count > pos_count:
-        return "negative", neg_count / (pos_count + neg_count + 1)
-    else:
-        return "neutral", 0.5
+def load_model(tokenizer, path='src/models/lstm_small_classifier.pth'):
+    model = LSTMClassifier(tokenizer.vocab_size, 128, 64, 4, 1, tokenizer.pad_token_id)
+    if os.path.exists(path):
+        model.load_state_dict(torch.load(path, map_location='cpu'))
+        print(f"  模型加载完成: {path}")
+    model.eval()
+    return model
+
+
+def predict_sentiment(model, texts, tokenizer, batch_size=32):
+    predictions = []
+    for i in range(0, len(texts), batch_size):
+        encoded = tokenizer(texts[i:i+batch_size], padding=True, truncation=True, max_length=256, return_tensors='pt')
+        with torch.no_grad():
+            probs = torch.sigmoid(model(encoded['input_ids'], encoded['attention_mask'])).squeeze()
+            preds = (probs > 0.5).long()
+            predictions.extend([preds.item()] if preds.dim() == 0 else preds.tolist())
+    return predictions
+
+
+def analyze(data, model, tokenizer):
+    print("\n[情感分析]")
+    predictions = predict_sentiment(model, [d['content'] for d in data], tokenizer)
+    for i, item in enumerate(data):
+        item['sentiment'] = '正面' if predictions[i] >= 0.5 else '负面'
+        item['sentiment_score'] = float(predictions[i])
+    pos = sum(1 for p in predictions if p >= 0.5)
+    print(f"  正面: {pos} 条 ({pos/len(predictions)*100:.1f}%) | 负面: {len(predictions)-pos} 条")
+    return data
+
+
+def crawl(circles, target):
+    print(f"\n[爬取数据] 目标: {target} 条")
+
+    if os.path.exists(DATA_FILE):
+        with open(DATA_FILE, 'r', encoding='utf-8') as f:
+            count = len(json.load(f))
+        if count >= target:
+            print(f"  数据已足够: {count} 条")
+            return
+
+    crawler = ZhihuCircleCrawler(headless=False)
+    try:
+        for i, circle in enumerate(circles, 1):
+            if os.path.exists(DATA_FILE):
+                with open(DATA_FILE, 'r', encoding='utf-8') as f:
+                    total = len(json.load(f))
+                if total >= target:
+                    break
+
+            print(f"  [{i}/{len(circles)}] {circle['name']}")
+            try:
+                crawler.crawl_ring(circle['ring_id'], max_days=0, save=True, max_posts=target)
+                time.sleep(2)
+            except Exception as e:
+                print(f"    错误: {e}")
+    finally:
+        crawler.close()
+
+
+def print_summary(data):
+    if not data:
+        return
+    print(f"\n{'='*50}\n摘要")
+    by_sent = {'正面': [], '负面': []}
+    for d in data:
+        s = d.get('sentiment', '未知')
+        if s in by_sent:
+            by_sent[s].append(d)
+    print(f"总计: {len(data)} | 正面: {len(by_sent['正面'])} | 负面: {len(by_sent['负面'])}")
+
+    for label, items in by_sent.items():
+        if items:
+            top = sorted(items, key=lambda x: x.get('likes', 0), reverse=True)[:3]
+            print(f"\n{label} Top 3:")
+            for j, item in enumerate(top, 1):
+                print(f"  {j}. {item['content'][:60]}... (赞:{item.get('likes',0)})")
 
 
 def main():
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    print("=" * 50 + "\nAI观点情感分析系统")
 
-    print("="*50)
-    print("NLP 公众意见分析 - 数据采集")
-    print("="*50)
+    print("\n[1/3] 加载模型...")
+    tokenizer = load_tokenizer()
+    model = load_model(tokenizer)
 
-    # ===== 1. 抓取微博热搜 =====
-    print("\n[1/4] 抓取微博热搜...")
-    hot_crawler = WeiboHotCrawler()
-    weibo_hot = hot_crawler.crawl()
-    print(f"  ✓ 抓取到 {len(weibo_hot)} 条热搜")
+    print("\n[2/3] 爬取数据...")
+    with open(CIRCLES_FILE, 'r', encoding='utf-8') as f:
+        circles = json.load(f)
+    crawl(circles, TARGET_POSTS)
 
-    # ===== 2. 抓取微博搜索内容（取前3个热搜）=====
-    print("\n[2/4] 抓取微博搜索内容...")
-    text_crawler = WeiboTextCrawler()
-    weibo_posts = []
+    print("\n[3/3] 分析...")
+    with open(DATA_FILE, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+    result = analyze(data, model, tokenizer)
 
-    for item in weibo_hot[:3]:
-        keyword = item['word']
-        print(f"  搜索: {keyword}")
-        results = text_crawler.crawl(keyword, max_pages=2)
-        weibo_posts.extend(results)
-        print(f"    找到 {len(results)} 条")
+    with open(RESULTS_FILE, 'w', encoding='utf-8') as f:
+        json.dump(result, f, ensure_ascii=False, indent=2)
+    print(f"  已保存: {RESULTS_FILE}")
 
-    print(f"  ✓ 共抓取 {len(weibo_posts)} 条微博")
-
-    # ===== 3. 抓取知乎讨论 =====
-    print("\n[3/4] 抓取知乎讨论...")
-    zhihu_crawler = ZhihuSearchCrawler()
-    zhihu_data = []
-
-    # 用前 5 个热搜在知乎搜索
-    for item in weibo_hot[:5]:
-        keyword = item['word']
-        print(f"  搜索: {keyword}")
-        results = zhihu_crawler.crawl(keyword, max_results=3)
-        zhihu_data.extend(results)
-
-    print(f"  ✓ 抓取到 {len(zhihu_data)} 条知乎内容")
-
-    # ===== 4. 情感分析 =====
-    print("\n[4/4] 情感分析...")
-    for item in zhihu_data:
-        sentiment, score = analyze_sentiment(item['content'])
-        item['sentiment'] = sentiment
-        item['sentiment_score'] = score
-
-    # 对微博内容也做情感分析
-    for item in weibo_posts:
-        sentiment, score = analyze_sentiment(item['text'])
-        item['sentiment'] = sentiment
-        item['sentiment_score'] = score
-
-    print(f"  ✓ 分析完成")
-
-    # ===== 5. 生成 JSON 数据 =====
-    output_data = {
-        "metadata": {
-            "timestamp": timestamp,
-            "weibo_hot_count": len(weibo_hot),
-            "weibo_posts_count": len(weibo_posts),
-            "zhihu_count": len(zhihu_data),
-        },
-        "weibo_hot": weibo_hot[:10],  # 只存前10条
-        "weibo_posts": weibo_posts[:20],  # 只存前20条
-        "zhihu": zhihu_data,
-        "sentiment_summary": {
-            "positive": sum(1 for x in zhihu_data if x.get('sentiment') == 'positive') + sum(1 for x in weibo_posts if x.get('sentiment') == 'positive'),
-            "negative": sum(1 for x in zhihu_data if x.get('sentiment') == 'negative') + sum(1 for x in weibo_posts if x.get('sentiment') == 'negative'),
-            "neutral": sum(1 for x in zhihu_data if x.get('sentiment') == 'neutral') + sum(1 for x in weibo_posts if x.get('sentiment') == 'neutral'),
-        }
-    }
-
-    # 保存到 docs/data/ 目录
-    output_file = OUTPUT_DIR / "analysis.json"
-    with open(output_file, 'w', encoding='utf-8') as f:
-        json.dump(output_data, f, ensure_ascii=False, indent=2)
-
-    print(f"\n✓ 数据已保存到 {output_file}")
-
-    # 打印摘要
-    print("\n" + "="*50)
-    print("数据摘要:")
-    print("="*50)
-    print(f"微博热搜: {len(weibo_hot)} 条")
-    print(f"微博内容: {len(weibo_posts)} 条")
-    print(f"知乎内容: {len(zhihu_data)} 条")
-    print(f"情感分布: 正面 {output_data['sentiment_summary']['positive']} | "
-          f"负面 {output_data['sentiment_summary']['negative']} | "
-          f"中性 {output_data['sentiment_summary']['neutral']}")
-    print("="*50)
-
-    # 打印热搜列表
-    print("\n热搜 Top 5:")
-    for item in weibo_hot[:5]:
-        label = item.get('label_name', '')
-        print(f"  {item['rank']}. {item['word']} {f'[{label}]' if label else ''}")
+    print_summary(result)
 
 
 if __name__ == '__main__':
