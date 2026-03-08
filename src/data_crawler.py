@@ -126,6 +126,91 @@ class WeiboTextCrawler(WeiboCrawler):
         return self.results
 
 
+class WeiboPipelineCrawler:
+    """微博热榜词条抓取 + 词条微博文本抓取 + 结构化输出。"""
+
+    def __init__(self):
+        self.hot_crawler = WeiboHotCrawler()
+        self.text_crawler = WeiboTextCrawler()
+
+    @staticmethod
+    def build_output_path(output_dir: Path, filename: str | None = None) -> Path:
+        output_dir.mkdir(parents=True, exist_ok=True)
+        if filename:
+            return output_dir / filename
+        ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+        return output_dir / f"weibo_hot_pipeline_{ts}.json"
+
+    @staticmethod
+    def dedup_posts(posts: list[dict]) -> list[dict]:
+        seen = set()
+        out = []
+        for post in posts:
+            key = post.get("weibo_id") or post.get("text", "")[:80]
+            if key in seen:
+                continue
+            seen.add(key)
+            out.append(post)
+        return out
+
+    def run(self, max_terms: int, max_pages: int, output_dir: Path, output_filename: str | None = None,) -> Path:
+        print("[1/3] 抓取微博热榜...")
+        hot_items = self.hot_crawler.crawl()
+        if not hot_items:
+            raise RuntimeError("微博热榜抓取为空，请检查网络或接口状态")
+
+        selected_terms = [item for item in hot_items if item.get("word")][:max_terms]
+        print(f"  热榜词条数: {len(hot_items)}，本次处理: {len(selected_terms)}")
+
+        print("[2/3] 按热榜词抓取微博文本...")
+        terms_results = []
+        all_posts = []
+
+        for idx, item in enumerate(selected_terms, start=1):
+            keyword = item["word"]
+            print(f"  [{idx}/{len(selected_terms)}] {keyword}")
+            posts = self.text_crawler.crawl(keyword=keyword, max_pages=max_pages)
+            posts = self.dedup_posts(posts)
+
+            terms_results.append(
+                {
+                    "rank": item.get("rank"),
+                    "keyword": keyword,
+                    "label_name": item.get("label_name"),
+                    "posts_count": len(posts),
+                    "posts": posts,
+                }
+            )
+            all_posts.extend(posts)
+
+            # reset crawler cache for next term
+            self.text_crawler.results = []
+
+        all_posts = self.dedup_posts(all_posts)
+
+        print("[3/3] 结构化输出...")
+        payload = {
+            "metadata": {
+                "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "source": "weibo_hot_pipeline",
+                "hot_terms_total": len(hot_items),
+                "hot_terms_processed": len(selected_terms),
+                "max_pages_per_term": max_pages,
+                "unique_posts_total": len(all_posts),
+            },
+            "hot_terms": selected_terms,
+            "terms_results": terms_results,
+            "all_posts": all_posts,
+        }
+
+        output_path = self.build_output_path(output_dir, output_filename)
+        with open(output_path, "w", encoding="utf-8") as file:
+            json.dump(payload, file, ensure_ascii=False, indent=2)
+
+        print(f"  已保存: {output_path}")
+        return output_path
+
+
 class ZhihuCircleCrawler(ZhihuCrawler):
     def crawl_ring(self, ring_id, max_days=0, save=True, max_posts=9999, min_comments=0):
         """
