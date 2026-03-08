@@ -1,0 +1,478 @@
+[
+  {
+    "term": "视频",
+    "trend": "rising",
+    "peak_freq": 130,
+    "peak_time_bin": "2026-03-08",
+    "total_freq": 153,
+    "time_series": [
+      {
+        "time_bin": "2026-03-07",
+        "freq": 23
+      },
+      {
+        "time_bin": "2026-03-08",
+        "freq": 130
+      }
+    ]
+  },
+  {
+    "term": "中国",
+    "trend": "rising",
+    "peak_freq": 122,
+    "peak_time_bin": "2026-03-08",
+    "total_freq": 134,
+    "time_series": [
+      {
+        "time_bin": "2026-03-07",
+        "freq": 12
+      },
+      {
+        "time_bin": "2026-03-08",
+        "freq": 122
+      }
+    ]
+  },
+  {
+    "term": "王毅",
+    "trend": "new_or_sparse",
+    "peak_freq": 76,
+    "peak_time_bin": "2026-03-08",
+    "total_freq": 76,
+    "time_series": [
+      {
+        "time_bin": "2026-03-07",
+        "freq": 0
+      },
+      {
+        "time_bin": "2026-03-08",
+        "freq": 76
+      }
+    ]
+  },
+  {
+    "term": "龙虾",
+    "trend": "new_or_sparse",
+    "peak_freq": 68,
+    "peak_time_bin": "2026-03-08",
+    "total_freq": 68,
+    "time_series": [
+      {
+        "time_bin": "2026-03-07",
+        "freq": 0
+      },
+      {
+        "time_bin": "2026-03-08",
+        "freq": 68
+      }
+    ]
+  },
+  {
+    "term": "台湾",
+    "trend": "new_or_sparse",
+    "peak_freq": 63,
+    "peak_time_bin": "2026-03-08",
+    "total_freq": 63,
+    "time_series": [
+      {
+        "time_bin": "2026-03-07",
+        "freq": 0
+      },
+      {
+        "time_bin": "2026-03-08",
+        "freq": 63
+      }
+    ]
+  },
+  {
+    "term": "统一",
+    "trend": "new_or_sparse",
+    "peak_freq": 56,
+    "peak_time_bin": "2026-03-08",
+    "total_freq": 56,
+    "time_series": [
+      {
+        "time_bin": "2026-03-07",
+        "freq": 0
+      },
+      {
+        "time_bin": "2026-03-08",
+        "freq": 56
+      }
+    ]
+  },
+  {
+    "term": "伊朗",
+    "trend": "rising",
+    "peak_freq": 72,
+    "peak_time_bin": "2026-03-08",
+    "total_freq": 74,
+    "time_series": [
+      {
+        "time_bin": "2026-03-07",
+        "freq": 2
+      },
+      {
+        "time_bin": "2026-03-08",
+        "freq": 72
+      }
+    ]
+  },
+  {
+    "term": "祖国",
+    "trend": "rising",
+    "peak_freq": 61,
+    "peak_time_bin": "2026-03-08",
+    "total_freq": 62,
+    "time_series": [
+      {
+        "time_bin": "2026-03-07",
+        "freq": 1
+      },
+      {
+        "time_bin": "2026-03-08",
+        "freq": 61
+      }
+    ]
+  },
+  {
+    "term": "世界",
+    "trend": "rising",
+    "peak_freq": 57,
+    "peak_time_bin": "2026-03-08",
+    "total_freq": 59,
+    "time_series": [
+      {
+        "time_bin": "2026-03-07",
+        "freq": 2
+      },
+      {
+        "time_bin": "2026-03-08",
+        "freq": 57
+      }
+    ]
+  },
+  {
+    "term": "风险",
+    "trend": "new_or_sparse",
+    "peak_freq": 34,
+    "peak_time_bin": "2026-03-08",
+    "total_freq": 34,
+    "time_series": [
+      {
+        "time_bin": "2026-03-07",
+        "freq": 0
+      },
+      {
+        "time_bin": "2026-03-08",
+        "freq": 34
+      }
+    ]
+  },
+  {
+    "term": "国家",
+    "trend": "rising",
+    "peak_freq": 54,
+    "peak_time_bin": "2026-03-08",
+    "total_freq": 63,
+    "time_series": [
+      {
+        "time_bin": "2026-03-07",
+        "freq": 9
+      },
+      {
+        "time_bin": "2026-03-08",
+        "freq": 54
+      }
+    ]
+  },
+  {
+    "term": "OpenClaw",
+    "trend": "new_or_sparse",
+    "peak_freq": 29,
+    "peak_time_bin": "2026-03-08",
+    "total_freq": 29,
+    "time_series": [
+      {
+        "time_bin": "2026-03-07",
+        "freq": 0
+      },
+      {
+        "time_bin": "2026-03-08",
+        "freq": 29
+      }
+    ]
+  },
+  {
+    "term": "乱象",
+    "trend": "new_or_sparse",
+    "peak_freq": 28,
+    "peak_time_bin": "2026-03-08",
+    "total_freq": 28,
+    "time_series": [
+      {
+        "time_bin": "2026-03-07",
+        "freq": 0
+      },
+      {
+        "time_bin": "2026-03-08",
+        "freq": 28
+      }
+    ]
+  },
+  {
+    "term": "乱象丛生",
+    "trend": "new_or_sparse",
+    "peak_freq": 27,
+    "peak_time_bin": "2026-03-08",
+    "total_freq": 27,
+    "time_series": [
+      {
+        "time_bin": "2026-03-07",
+        "freq": 0
+      },
+      {
+        "time_bin": "2026-03-08",
+        "freq": 27
+      }
+    ]
+  },
+  {
+    "term": "丛生",
+    "trend": "new_or_sparse",
+    "peak_freq": 27,
+    "peak_time_bin": "2026-03-08",
+    "total_freq": 27,
+    "time_series": [
+      {
+        "time_bin": "2026-03-07",
+        "freq": 0
+      },
+      {
+        "time_bin": "2026-03-08",
+        "freq": 27
+      }
+    ]
+  },
+  {
+    "term": "童琴",
+    "trend": "new_or_sparse",
+    "peak_freq": 19,
+    "peak_time_bin": "2026-03-07",
+    "total_freq": 19,
+    "time_series": [
+      {
+        "time_bin": "2026-03-07",
+        "freq": 19
+      },
+      {
+        "time_bin": "2026-03-08",
+        "freq": 0
+      }
+    ]
+  },
+  {
+    "term": "香港",
+    "trend": "new_or_sparse",
+    "peak_freq": 16,
+    "peak_time_bin": "2026-03-07",
+    "total_freq": 16,
+    "time_series": [
+      {
+        "time_bin": "2026-03-07",
+        "freq": 16
+      },
+      {
+        "time_bin": "2026-03-08",
+        "freq": 0
+      }
+    ]
+  },
+  {
+    "term": "霍启刚",
+    "trend": "new_or_sparse",
+    "peak_freq": 11,
+    "peak_time_bin": "2026-03-07",
+    "total_freq": 11,
+    "time_series": [
+      {
+        "time_bin": "2026-03-07",
+        "freq": 11
+      },
+      {
+        "time_bin": "2026-03-08",
+        "freq": 0
+      }
+    ]
+  },
+  {
+    "term": "冰雪",
+    "trend": "falling",
+    "peak_freq": 15,
+    "peak_time_bin": "2026-03-07",
+    "total_freq": 16,
+    "time_series": [
+      {
+        "time_bin": "2026-03-07",
+        "freq": 15
+      },
+      {
+        "time_bin": "2026-03-08",
+        "freq": 1
+      }
+    ]
+  },
+  {
+    "term": "AG",
+    "trend": "new_or_sparse",
+    "peak_freq": 9,
+    "peak_time_bin": "2026-03-07",
+    "total_freq": 9,
+    "time_series": [
+      {
+        "time_bin": "2026-03-07",
+        "freq": 9
+      },
+      {
+        "time_bin": "2026-03-08",
+        "freq": 0
+      }
+    ]
+  },
+  {
+    "term": "肖战",
+    "trend": "new_or_sparse",
+    "peak_freq": 9,
+    "peak_time_bin": "2026-03-07",
+    "total_freq": 9,
+    "time_series": [
+      {
+        "time_bin": "2026-03-07",
+        "freq": 9
+      },
+      {
+        "time_bin": "2026-03-08",
+        "freq": 0
+      }
+    ]
+  },
+  {
+    "term": "短剧",
+    "trend": "falling",
+    "peak_freq": 11,
+    "peak_time_bin": "2026-03-07",
+    "total_freq": 21,
+    "time_series": [
+      {
+        "time_bin": "2026-03-07",
+        "freq": 11
+      },
+      {
+        "time_bin": "2026-03-08",
+        "freq": 10
+      }
+    ]
+  },
+  {
+    "term": "孩子",
+    "trend": "rising",
+    "peak_freq": 24,
+    "peak_time_bin": "2026-03-08",
+    "total_freq": 35,
+    "time_series": [
+      {
+        "time_bin": "2026-03-07",
+        "freq": 11
+      },
+      {
+        "time_bin": "2026-03-08",
+        "freq": 24
+      }
+    ]
+  },
+  {
+    "term": "邝兆镭",
+    "trend": "new_or_sparse",
+    "peak_freq": 7,
+    "peak_time_bin": "2026-03-07",
+    "total_freq": 7,
+    "time_series": [
+      {
+        "time_bin": "2026-03-07",
+        "freq": 7
+      },
+      {
+        "time_bin": "2026-03-08",
+        "freq": 0
+      }
+    ]
+  },
+  {
+    "term": "经济",
+    "trend": "stable",
+    "peak_freq": 10,
+    "peak_time_bin": "2026-03-07",
+    "total_freq": 20,
+    "time_series": [
+      {
+        "time_bin": "2026-03-07",
+        "freq": 10
+      },
+      {
+        "time_bin": "2026-03-08",
+        "freq": 10
+      }
+    ]
+  },
+  {
+    "term": "冰雪经济",
+    "trend": "new_or_sparse",
+    "peak_freq": 6,
+    "peak_time_bin": "2026-03-07",
+    "total_freq": 6,
+    "time_series": [
+      {
+        "time_bin": "2026-03-07",
+        "freq": 6
+      },
+      {
+        "time_bin": "2026-03-08",
+        "freq": 0
+      }
+    ]
+  },
+  {
+    "term": "WB",
+    "trend": "new_or_sparse",
+    "peak_freq": 6,
+    "peak_time_bin": "2026-03-07",
+    "total_freq": 6,
+    "time_series": [
+      {
+        "time_bin": "2026-03-07",
+        "freq": 6
+      },
+      {
+        "time_bin": "2026-03-08",
+        "freq": 0
+      }
+    ]
+  },
+  {
+    "term": "育儿补贴",
+    "trend": "new_or_sparse",
+    "peak_freq": 6,
+    "peak_time_bin": "2026-03-07",
+    "total_freq": 6,
+    "time_series": [
+      {
+        "time_bin": "2026-03-07",
+        "freq": 6
+      },
+      {
+        "time_bin": "2026-03-08",
+        "freq": 0
+      }
+    ]
+  }
+]

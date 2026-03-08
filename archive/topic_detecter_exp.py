@@ -7,7 +7,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-
 def get_tokenizer(model_name=None):
     if model_name is None:
         model_name = os.getenv('SEN_EMB_MODEL_PATH')

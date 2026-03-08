@@ -1,0 +1,36 @@
+Keyword Hotspots Summary
+========================================
+
+[2026-03-07] top 15
+- 童琴 | score=28.161 | freq=19 | lift=20.00
+- 香港 | score=24.433 | freq=16 | lift=17.00
+- 视频 | score=23.522 | freq=23 | lift=24.00
+- 霍启刚 | score=18.057 | freq=11 | lift=12.00
+- 冰雪 | score=16.491 | freq=15 | lift=16.00
+- AG | score=15.418 | freq=9 | lift=10.00
+- 肖战 | score=15.418 | freq=9 | lift=10.00
+- 中国 | score=13.771 | freq=12 | lift=13.00
+- 短剧 | score=12.848 | freq=11 | lift=12.00
+- 孩子 | score=12.848 | freq=11 | lift=12.00
+- 邝兆镭 | score=12.696 | freq=7 | lift=8.00
+- 经济 | score=11.915 | freq=10 | lift=11.00
+- 冰雪经济 | score=11.291 | freq=6 | lift=7.00
+- WB | score=11.291 | freq=6 | lift=7.00
+- 育儿补贴 | score=11.291 | freq=6 | lift=7.00
+
+[2026-03-08] top 15
+- 王毅 | score=95.237 | freq=76 | lift=77.00
+- 中国 | score=93.481 | freq=122 | lift=9.46
+- 视频 | score=90.691 | freq=130 | lift=5.46
+- 龙虾 | score=85.997 | freq=68 | lift=69.00
+- 台湾 | score=80.207 | freq=63 | lift=64.00
+- 统一 | score=72.079 | freq=56 | lift=57.00
+- 伊朗 | score=61.912 | freq=72 | lift=24.33
+- 祖国 | score=54.008 | freq=61 | lift=31.00
+- 世界 | score=49.553 | freq=57 | lift=19.33
+- 风险 | score=46.259 | freq=34 | lift=35.00
+- 国家 | score=40.490 | freq=54 | lift=5.50
+- OpenClaw | score=40.297 | freq=29 | lift=30.00
+- 乱象 | score=39.097 | freq=28 | lift=29.00
+- 乱象丛生 | score=37.896 | freq=27 | lift=28.00
+- 丛生 | score=37.896 | freq=27 | lift=28.00

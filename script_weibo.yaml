@@ -1,0 +1,53 @@
+params:
+  # 抓取热榜前 N 个词
+  max_terms: 40
+  # 每个词抓多少页微博
+  max_pages: 10
+  # 时间窗粒度（day/week/month/2week）
+  time_granularity: day
+  # 每个时间窗最少文档数阈值
+  min_docs_per_bin: 40
+  # 每个时间窗输出前 K 个热点词。
+  top_k: 15
+  # 词在单窗内最小文档频次阈值，过滤偶发词。
+  min_term_df: 2
+  # 参与“热点流动轨迹”构建的词数量（按综合热度选前 N）。
+  flow_top_n: 50
+  # 终端每个时间窗打印几个热点。
+  console_top_k: 10
+  # 终端只展示最近 N 个时间窗。
+  console_recent_bins: 8
+
+# IO / workflow
+skip_crawl: false
+with_visuals: false
+weibo_dir: data
+weibo_file: ""
+output_dir: outputs
+console_no_doc: true
+
+# 领域词控制
+# 这些词会在提词阶段直接过滤，减少“视频/世界”类泛词干扰
+extra_stopwords:
+  - 视频
+  - 中国
+  - 世界
+  - 国家
+  - 风险
+  - 发展
+  - 祖国
+  - 孩子
+
+# 热点优先词重排（用于把 openclaw/moltbot 类实体往前提）
+priority_terms:
+  - openclaw
+  - moltbot
+  - glm
+  - claude
+  - kimi
+  - deepseek
+  - agent
+priority_boost: 1.4
+
+# 外部停用词文件（每行一个词），为空表示不启用
+stopwords_file: ""
