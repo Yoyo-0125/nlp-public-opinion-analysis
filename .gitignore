@@ -10,10 +10,6 @@ dist/
 
 # Environment
 .env
-.venv/
-venv/
-ENV/
-env/
 
 # Data - 保留目录结构，忽略具体数据文件
 data/*.csv
@@ -43,28 +39,18 @@ src/models/text2vec-base-chinese/
 *.swo
 .claude/
 
-# OS
-.DS_Store
-Thumbs.db
-
 # Logs
 *.log
 logs/
 
 # 爬虫临时文件
-*_auth.json
 *_data.json
+*.json.bak
 
 # Chrome 浏览器数据 (DrissionPage)
 chrome_data*/
 chrome_*/
-chromium_data/
 
-# GitHub Pages 输出目录 (动态生成)
-html/data/*.json
-html/data/*.csv
-docs/data/*.json
-docs/data/*.csv
-
-*_files/
+.claude/
 CLAUDE_CODE.md
+CLAUDE.md
