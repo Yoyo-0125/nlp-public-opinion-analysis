@@ -45,6 +45,7 @@ logs/
 
 # 爬虫临时文件
 *_data.json
+*.json.bak
 
 # Chrome 浏览器数据 (DrissionPage)
 chrome_data*/
